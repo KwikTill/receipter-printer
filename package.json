@@ -1,0 +1,20 @@
+{
+  "name": "@kwiktill/receipt-printer",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/",
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "author": "KwikTill",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "escpos": "^3.0.0-alpha.6",
+    "puppeteer": "^14.3.0",
+    "usb": "^2.5.2",
+    "uuid": "^9.0.0"
+  }
+}
