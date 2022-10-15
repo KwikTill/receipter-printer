@@ -30,10 +30,29 @@ class ReceiptPrinter {
       });
    }
 
+   _createEscposPrinter() {
+      return new Promise((resolve, reject) => {
+
+         const device = new escpos.USB();
+         
+         device.open(async err => {
+
+            if (err) {
+               reject(err);
+               return;
+            }
+
+            const printer = new escpos.Printer(device);
+            resolve(printer);
+
+         });
+      });
+   }
+
    async print(data) {
 
       if (!this._initialized)
-         throw new Error('Printer not initialized');
+         await this.init();
 
       // creating page
       const page = await this._browser.newPage();
@@ -41,7 +60,7 @@ class ReceiptPrinter {
       // set receipt size
       await page.setViewport({
          width: this._dotsPerLine,
-         height: this._dotsPerLine,
+         height: this._dotsPerLine / 2,
       });
 
       // generating html
@@ -60,9 +79,10 @@ class ReceiptPrinter {
 
 
       // print
-      const img = await this._prepareImage(screenshotPath)
-      await this._printer.image(img);
-      this._printer.cut().close();
+      const img = await this._prepareImage(screenshotPath);
+      const printer = await this._createEscposPrinter();
+      await printer.image(img);
+      printer.cut().close();
 
       // removing the screenshot from the disk
       await fs.unlink(screenshotPath);
@@ -71,31 +91,9 @@ class ReceiptPrinter {
 
    }
 
-   init() {
-      return new Promise((resolve, reject) => {
-         const device = new escpos.USB();
-         
-         device.open(async err => {
-
-            if (err) {
-               reject(err);
-               return;
-            }
-
-            this._device = device;
-            this._printer = new escpos.Printer(device);
-
-
-            try {
-               this._browser = await puppeteer.launch();
-               this._initialized = true;
-               resolve();
-            } catch (err) {
-               reject(err);
-            }
-
-         });
-      });
+   async init() {
+      this._browser = await puppeteer.launch();
+      this._initialized = true;
    }
 
    /**

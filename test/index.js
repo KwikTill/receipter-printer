@@ -12,8 +12,14 @@ const printer = new Printer({
 (async () => {
 
    try {
+
       await printer.init();
+      
       await printer.print({});
+
+      setTimeout(async () => {
+         await printer.print({});
+      }, 10000);
    } catch (err) {
       console.log(err);
    }
