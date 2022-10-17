@@ -49,7 +49,7 @@ class ReceiptPrinter {
       });
    }
 
-   async print(data) {
+   async print(data={}) {
 
       if (!this._initialized)
          await this.init();
