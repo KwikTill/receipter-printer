@@ -3,8 +3,11 @@ console.clear();
 
 const Printer = require('../index.js');
 
+
+const dotsPerLine = parseInt(process.env.DOTS_PER_LINE) || 576
+
 const printer = new Printer({
-   dotsPerLine: 576,
+   dotsPerLine,
    templatePath: `${__dirname}/../test.ejs`
 });
 
@@ -14,12 +17,8 @@ const printer = new Printer({
    try {
 
       await printer.init();
-      
-      await printer.print({});
+      await printer.print();
 
-      setTimeout(async () => {
-         await printer.print({});
-      }, 10000);
    } catch (err) {
       console.log(err);
    }

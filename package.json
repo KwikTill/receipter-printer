@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node test/",
+    "test": "DOTS_PER_LINE=384 node test/",
     "start": "node .",
     "dev": "nodemon ."
   },
